@@ -101,7 +101,7 @@ function Gallery() {
       ) : (
         <ErrorText>Qandaydir xatolik yuz berdi, iltimos keyinroq urinib ko‘ring.</ErrorText>
       )) : (
-        <div className='flex items-center justify-center h-[100vh]'>
+        <div className='flex items-center justify-center h-[90vh]'>
           <TbLoader2 className='text-black dark:text-white animate-spin' />
         </div>
       )}
