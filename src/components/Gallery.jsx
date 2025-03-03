@@ -40,10 +40,10 @@ function Gallery() {
     <div>
       {!gallery.isLoading ? (!gallery.isError ? (
         <>
-          <div className='grid grid-cols-4 gap-5'>
-            <div className='row-span-2 flex items-center justify-center text-white bg-zinc-950 rounded-md'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
+            <a className='row-span-2 flex items-center justify-center text-white bg-zinc-950 rounded-md' href='https://www.youtube.com/@MountOps' target={'_blank'}>
               <h1>MountOps</h1>
-            </div>
+            </a>
             {gallery.data.map((item, index) => (
               <GalleryCard
                 smallImgSrc={item.urls.thumb}
