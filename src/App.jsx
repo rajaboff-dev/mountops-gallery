@@ -7,7 +7,7 @@ function App() {
   const queryClient = new QueryClient()
   return (
     <QueryClientProvider client={queryClient}>
-      <div className='bg-slate-50 dark:bg-black min-h-screen p-5'>
+      <div className='bg-black min-h-screen p-5'>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Gallery />} />
