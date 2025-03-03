@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import useGetGallery from "../hooks/useGetGallery.js";
 import ErrorText from "./ui/ErrorText.jsx";
 import {TbLoader2, TbShare} from "react-icons/tb";
 import GalleryCard from "./GalleryCard.jsx";
-import { Thumbnails } from "yet-another-react-lightbox/plugins";
+import {Thumbnails} from "yet-another-react-lightbox/plugins";
 import Download from "yet-another-react-lightbox/plugins/download";
 import Share from "yet-another-react-lightbox/plugins/share";
 import Lightbox from "yet-another-react-lightbox";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import GalleryFooter from "@/components/GalleryFooter.jsx";
 
 function Gallery() {
   const gallery = useGetGallery();
@@ -38,20 +39,25 @@ function Gallery() {
   return (
     <div>
       {!gallery.isLoading ? (!gallery.isError ? (
-        <div className='grid grid-cols-4 gap-5'>
-          {gallery.data.map((item, index) => (
-            <GalleryCard
-              smallImgSrc={item.urls.thumb}
-              alt={item.alt_description}
-              key={index}
-              onClick={() => {
-                setCurrentIndex(index);
-                setOpen(true);
-                setSearchParams({ id: item.id });
-                console.log('working')
-              }}
-            />
-          ))}
+        <>
+          <div className='grid grid-cols-4 gap-5'>
+            <div className='row-span-2 flex items-center justify-center text-white bg-zinc-950 rounded-md'>
+              <h1>MountOps</h1>
+            </div>
+            {gallery.data.map((item, index) => (
+              <GalleryCard
+                smallImgSrc={item.urls.thumb}
+                alt={item.alt_description}
+                key={index}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  setOpen(true);
+                  setSearchParams({id: item.id});
+                  console.log('working')
+                }}
+              />
+            ))}
+          </div>
           <Lightbox
             open={open}
             close={() => {
@@ -62,15 +68,15 @@ function Gallery() {
             index={currentIndex}
             plugins={[Thumbnails, Download, Share]}
             on={{
-              view: ({ index }) => {
+              view: ({index}) => {
                 setCurrentIndex(index);
-                setSearchParams({ id: imagesForSlide[index].id });
+                setSearchParams({id: imagesForSlide[index].id});
               },
             }}
             toolbar={{
               buttons: [
                 <button key="share-button" type="button" className="yarl__button" onClick={() => {
-                  if(!navigator.clipboard) {
+                  if (!navigator.clipboard) {
                     setCopiedText('Sizning brauzeringiz bu narsani qo\'llab quvvatlamaydi iltimos boshqa brauzerdan urinib ko\'ring')
                     return
                   }
@@ -78,33 +84,35 @@ function Gallery() {
                     .then(() => {
                       setCopiedText('Nusxalandi!');
                     }).catch((err) => {
-                      setCopiedText('Nusxalab bo\'lmadi!')
-                    })
+                    setCopiedText('Nusxalab bo\'lmadi!')
+                  })
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}>
-                  <TbShare />
+                  <TbShare/>
                 </button>,
                 "close",
               ]
             }}
             render={{
-              iconLoading: () => <TbLoader2 className='animate-spin text-white' />,
+              iconLoading: () => <TbLoader2 className='animate-spin text-white'/>,
             }}
           />
           {copied && (
-            <div className='absolute left-0 right-0 mx-auto w-fit z-[9999999] bg-white text-black px-5 py-2 rounded-full'>
+            <div
+              className='absolute left-0 right-0 mx-auto w-fit z-[9999999] bg-white text-black px-5 py-2 rounded-full'>
               <h1>{copiedText}</h1>
             </div>
           )}
-        </div>
+        </>
       ) : (
         <ErrorText>Qandaydir xatolik yuz berdi, iltimos keyinroq urinib ko‘ring.</ErrorText>
       )) : (
         <div className='flex items-center justify-center h-[90vh]'>
-          <TbLoader2 className='text-black dark:text-white animate-spin' />
+          <TbLoader2 className='text-black dark:text-white animate-spin'/>
         </div>
       )}
+      <GalleryFooter/>
     </div>
   );
 }
