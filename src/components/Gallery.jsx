@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import useGetGallery from "../hooks/useGetGallery.js";
 import ErrorText from "./ui/ErrorText.jsx";
-import {TbLoader2, TbShare} from "react-icons/tb";
+import {TbArrowLeft, TbArrowRight, TbDownload, TbLoader2, TbShare, TbX} from "react-icons/tb";
 import GalleryCard from "./GalleryCard.jsx";
 import {Thumbnails} from "yet-another-react-lightbox/plugins";
 import Download from "yet-another-react-lightbox/plugins/download";
@@ -60,6 +60,12 @@ function Gallery() {
           </div>
           <Lightbox
             open={open}
+            styles={{
+              container: {
+                background: 'rgba(255, 255, 255, 0.14)',
+                backdropFilter: 'blur(20px)',
+              },
+            }}
             close={() => {
               setOpen(false);
               setSearchParams({});
@@ -75,27 +81,55 @@ function Gallery() {
             }}
             toolbar={{
               buttons: [
-                <button key="share-button" type="button" className="yarl__button" onClick={() => {
-                  if (!navigator.clipboard) {
-                    setCopiedText('Sizning brauzeringiz bu narsani qo\'llab quvvatlamaydi iltimos boshqa brauzerdan urinib ko\'ring')
-                    return
-                  }
-                  navigator.clipboard.writeText(imagesForSlide[currentIndex].share)
-                    .then(() => {
-                      setCopiedText('Nusxalandi!');
-                    }).catch((err) => {
-                    setCopiedText('Nusxalab bo\'lmadi!')
-                  })
-                  setCopied(true);
-                  setTimeout(() => setCopied(false), 2000);
-                }}>
-                  <TbShare/>
+                <button
+                  key="share-button"
+                  type="button"
+                  onClick={() => {
+                    if (!navigator.clipboard) {
+                      setCopiedText('Sizning brauzeringiz bu narsani qo\'llab quvvatlamaydi iltimos boshqa brauzerdan urinib ko\'ring')
+                      return
+                    }
+                    navigator.clipboard.writeText(imagesForSlide[currentIndex].share)
+                      .then(() => {
+                        setCopiedText('Nusxalandi!');
+                      }).catch((err) => {
+                      setCopiedText('Nusxalab bo\'lmadi!')
+                    }
+                    )
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
+                  className="flex items-center justify-center"
+                >
+                  <div className='bg-white rounded-full p-2.5'>
+                    <TbShare className='text-black text-xs'/>
+                  </div>
                 </button>,
                 "close",
               ]
             }}
             render={{
               iconLoading: () => <TbLoader2 className='animate-spin text-white'/>,
+              iconClose: () => (
+                <div className='p-2 bg-white rounded-full'>
+                  <TbX className='text-black' />
+                </div>
+              ),
+              iconPrev: () => (
+                <div className='p-2.5 bg-white rounded-full flex items-center justify-center'>
+                  <TbArrowLeft className='text-black'/>
+                </div>
+              ),
+              iconNext: () => (
+                <div className='p-2.5 bg-white rounded-full flex items-center justify-center'>
+                  <TbArrowRight className='text-black'/>
+                </div>
+              ),
+              iconDownload: () => (
+                <div className='p-2 bg-white rounded-full flex items-center justify-center'>
+                  <TbDownload className='text-black'/>
+                </div>
+              ),
             }}
           />
           {copied && (
